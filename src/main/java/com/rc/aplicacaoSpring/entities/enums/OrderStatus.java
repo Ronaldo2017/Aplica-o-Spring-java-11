@@ -6,7 +6,9 @@ public enum OrderStatus {
 	PAID(2),
 	SHIPPED(3),
 	DELIVERED(4),
-	CANCELED(5);
+	CANCELED(5),
+	PAYMENT(6);
+	
 	
 	private int code;
 	
@@ -18,14 +20,15 @@ public enum OrderStatus {
 		return code;
 	}
 	
-	//converte um valor para o tipo enumerado
+	//converte um valor numerico para o tipo enumerado
+	//statico, nao precisa instanciar
 	public static OrderStatus valueOf(int code) {
 		for (OrderStatus value : OrderStatus.values()) {
 			if(value.getCode() == code) {
 				return value;
 			}
 		}
-		throw new IllegalArgumentException("Status iválido.");
+		throw new IllegalArgumentException("Status inválido.");
 	}
 
 }

@@ -30,6 +30,7 @@ public class Order implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
 
+	//fica explicito a gravacao no bd, que é um numero inteiro
 	private Integer orderStatus;
 
 	// mapeamento da associacao com usuario
