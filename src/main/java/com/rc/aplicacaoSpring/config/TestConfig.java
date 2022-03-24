@@ -10,25 +10,30 @@ import org.springframework.context.annotation.Profile;
 
 import com.rc.aplicacaoSpring.entities.Category;
 import com.rc.aplicacaoSpring.entities.Order;
+import com.rc.aplicacaoSpring.entities.Product;
 import com.rc.aplicacaoSpring.entities.User;
 import com.rc.aplicacaoSpring.entities.enums.OrderStatus;
 import com.rc.aplicacaoSpring.repositories.CategoryRepository;
 import com.rc.aplicacaoSpring.repositories.OrderRepository;
+import com.rc.aplicacaoSpring.repositories.ProductRepository;
 import com.rc.aplicacaoSpring.repositories.UserRepository;
 
 @Configuration
 @Profile("test") // vem do arquivo = aplication-test-properties
 public class TestConfig implements CommandLineRunner {
 	// injeção de dependencia = com o userrepository
-	
+
 	@Autowired // resolve a injeção de dependencia
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private OrderRepository orderRepository;
-	
+
 	@Autowired
 	private CategoryRepository categoryRepository;
+
+	@Autowired
+	private ProductRepository productRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -36,23 +41,29 @@ public class TestConfig implements CommandLineRunner {
 		 * este metodo vai ser rodado, todas as vezes que a aplicação for iniciada
 		 */
 
-		
-		Category cat1 = new Category(null, "Electronics"); 
-		Category cat2 = new Category(null, "Books"); 
-		Category cat3 = new Category(null, "Computers"); 
-		
+		Category cat1 = new Category(null, "Electronics");
+		Category cat2 = new Category(null, "Books");
+		Category cat3 = new Category(null, "Computers");
+
+		Product p1 = new Product(null, "The Lord of the Rings", "Lorem ipsum dolor sit amet, consectetur.", 90.5, "");
+		Product p2 = new Product(null, "Smart TV", "Nulla eu imperdiet purus. Maecenas ante.", 2190.0, "");
+		Product p3 = new Product(null, "Macbook Pro", "Nam eleifend maximus tortor, at mollis.", 1250.0, "");
+		Product p4 = new Product(null, "PC Gamer", "Donec aliquet odio ac rhoncus cursus.", 1200.0, "");
+		Product p5 = new Product(null, "Rails for Dummies", "Cras fringilla convallis sem vel faucibus.", 100.99, "");
+
 		User u1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
 		User u2 = new User(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
 
-		//associacao user > order
+		// associacao user > order
 		Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.DELIVERED, u1);
 		Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.PAID, u2);
-		Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.PAYMENT, u1); 
-		
+		Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.PAYMENT, u1);
+
 		// salvando os dados no bd/ passando uma lista de usuarios / Arrays.asList(u1,
 		// u2)
-		
+
 		categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
+		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 		userRepository.saveAll(Arrays.asList(u1, u2));
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3));
 	}
