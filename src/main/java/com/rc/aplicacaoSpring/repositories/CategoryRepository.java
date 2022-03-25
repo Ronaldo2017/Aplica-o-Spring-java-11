@@ -8,3 +8,5 @@ import com.rc.aplicacaoSpring.entities.Category;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
 }
+
+

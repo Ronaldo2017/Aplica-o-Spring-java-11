@@ -1,25 +1,26 @@
 package com.rc.aplicacaoSpring.entities;
 
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
 
 @Entity
 @Table(name = "tb_product")
 public class Product implements Serializable {
-
-	private static final long serialVersionUID = 1L;
 	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -31,7 +32,16 @@ public class Product implements Serializable {
 	// colecao SET = conjunto/ garante que nao ira ter mais de um produto
 	// com a mesma categoria
 	// instancia o set = para garantir que a colecao vai comecar vazia e nao nula
-	@Transient
+	
+				//faz a correcao da execao transient, que nao deixava gravar os dados
+	@ManyToMany( cascade = CascadeType.ALL) 
+					// nome da table no bd	
+	@JoinTable(name = "tb_product_category", 
+					// nome da fk
+	joinColumns = @JoinColumn(name = "product_id"),
+	//fk(chave estrangeira) da outra entidade = categoria
+	inverseJoinColumns = @JoinColumn(name = "category_id"))
+	
 	private Set<Category> categories = new HashSet<>();// ja esta instanciado, nao vai no construtor
 
 	public Product() {
