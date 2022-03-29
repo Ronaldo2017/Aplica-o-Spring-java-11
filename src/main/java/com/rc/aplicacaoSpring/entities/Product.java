@@ -13,12 +13,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_product")
 public class Product implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -32,17 +35,20 @@ public class Product implements Serializable {
 	// colecao SET = conjunto/ garante que nao ira ter mais de um produto
 	// com a mesma categoria
 	// instancia o set = para garantir que a colecao vai comecar vazia e nao nula
-	
-				//faz a correcao da execao transient, que nao deixava gravar os dados
-	@ManyToMany( cascade = CascadeType.ALL) 
-					// nome da table no bd	
-	@JoinTable(name = "tb_product_category", 
-					// nome da fk
-	joinColumns = @JoinColumn(name = "product_id"),
-	//fk(chave estrangeira) da outra entidade = categoria
-	inverseJoinColumns = @JoinColumn(name = "category_id"))
-	
+
+	// faz a correcao da execao transient, que nao deixava gravar os dados
+	@ManyToMany(cascade = CascadeType.ALL)
+	// nome da table no bd
+	@JoinTable(name = "tb_product_category",
+			// nome da fk
+			joinColumns = @JoinColumn(name = "product_id"),
+			// fk(chave estrangeira) da outra entidade = categoria
+			inverseJoinColumns = @JoinColumn(name = "category_id"))
+
 	private Set<Category> categories = new HashSet<>();// ja esta instanciado, nao vai no construtor
+
+	@OneToMany(mappedBy = "id.product")
+	private Set<OrderItem> items = new HashSet<>();
 
 	public Product() {
 
@@ -99,6 +105,15 @@ public class Product implements Serializable {
 
 	public Set<Category> getCategories() {
 		return categories;
+	}
+
+	@JsonIgnore
+	public Set<Order> getOrders() {
+		Set<Order> set = new HashSet<>();
+		for (OrderItem x : items) {
+			set.add(x.getOrder());
+		}
+		return set;
 	}
 
 	@Override
